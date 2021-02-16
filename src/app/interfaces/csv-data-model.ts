@@ -1,6 +1,6 @@
 export interface CsvDataModel {
-  date: string,
-  closeLast: string,
+  date: Date,
+  closeLast: number,
   volume: string,
   open: string,
   high: string,

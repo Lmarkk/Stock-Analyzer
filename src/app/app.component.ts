@@ -29,6 +29,7 @@ export class AppComponent {
       let input = $event.target;
       let reader = new FileReader();
       reader.readAsText(input.files[0]);
+      this.fileName = input.files[0].name;
 
       reader.onload = () => {
         let csvData = reader.result;
@@ -74,9 +75,11 @@ export class AppComponent {
     for (let i = 1; i < csvRecordsArray.length; i++) {
       let currentRecord = (<string>csvRecordsArray[i]).split(',');
       if (currentRecord.length == headerLength) {
+        let date = new Date(currentRecord[0].trim());
+        date.setHours( 0,0,0,0 );
         let csvRecord: CsvDataModel = {
-          date: currentRecord[0].trim(),
-          closeLast: currentRecord[1].trim(),
+          date: date,
+          closeLast: +currentRecord[1].replace('$', '').trim(),
           volume: currentRecord[2].trim(),
           open: currentRecord[3].trim(),
           high: currentRecord[4].trim(),
