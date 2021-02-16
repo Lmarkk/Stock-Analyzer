@@ -1,14 +1,59 @@
-<h1>{{title}}</h1>
-<label>Upload CSV file</label>
-<input
-  type="file"
-  #csvReader
-  name="Upload CSV"
-  (change)="uploadListener($event)"
-  accept=".csv" />
+<div class="container">
+  <h1>{{title}}</h1>
+  <div class="input-group mb-3">
+    <div class="custom-file">
+      <input
+        type="file"
+        class="custom-file-input"
+        id="inputGroupFile01"
+        #csvReader
+        name="Upload CSV"
+        (change)="uploadListener($event)"
+        accept=".csv" />
+      <label class="custom-file-label" for="inputGroupFile01">Choose CSV file</label>
+    </div>
+  </div>
 
-<div *ngIf="isLoaded">
-  <p >Bullish trend analysis</p>
+
+  <div *ngIf="isLoaded">
+    <h5>{{fileName}}</h5>
+
+    <form>
+      <p>Bullish trend analysis</p>
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="starting-date-addon">Starting date</span>
+          </div>
+          <input type="date"
+                 #bullishStartDate
+                 class="form-control"
+                 placeholder="Starting date"
+                 aria-label="Starting date"
+                 aria-describedby="starting-date-addon">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="ending-date-addon">Ending date</span>
+          </div>
+          <input type="date"
+                 #bullishEndDate
+                 class="form-control"
+                 placeholder="Ending date"
+                 aria-label="Ending date"
+                 aria-describedby="ending-date-addon">
+        </div>
+      </div>
+      <button class="btn btn-primary"
+              type="button"
+              (click)="calculateBullish(bullishStartDate.value, bullishEndDate.value)">
+        Calculate
+      </button>
+      <span>Longest bullish trend: {{bullishDaysInARow}} days</span>
+    </form>
+  </div>
 </div>
 
 
