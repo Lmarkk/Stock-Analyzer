@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-// import { StockDataService } from "./stock-data.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { StockAnalysisService } from "./services/stock-analysis-service";
 import { CsvDataModel } from "./interfaces/csv-data-model";
 
 @Component({
@@ -10,9 +10,15 @@ import { CsvDataModel } from "./interfaces/csv-data-model";
 export class AppComponent {
   title = 'Stock Analyzer 2000';
 
-  public records: CsvDataModel[] = [];
-  private isLoaded: boolean = false;
+  records: CsvDataModel[] = [];
+  isLoaded: boolean = false;
+  fileName: string = '';
+
+  bullishDaysInARow: number = 0;
+
   @ViewChild('csvReader') csvReader: any;
+
+  constructor(private stockAnalysisService: StockAnalysisService) {}
 
   uploadListener($event: any): void {
 
@@ -83,10 +89,15 @@ export class AppComponent {
     return csvArr;
   }
 
-  // constructor(private stockDataService: StockDataService) {}
+  calculateBullish(startDate, endDate) {
+    let start: Date = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
 
-  // ngOnInit() {
-  //   console.log(this.stockDataService.getData());
-  // }
+    let end: Date = new Date(endDate);
+    end.setHours(0, 0, 0, 0);
+
+    this.bullishDaysInARow = this.stockAnalysisService
+      .calculateBullishDaysInARow(start, end, this.records);
+  }
 
 }
