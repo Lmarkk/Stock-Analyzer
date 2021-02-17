@@ -15,6 +15,7 @@ export class AppComponent {
   fileName: string = '';
 
   bullishDaysInARow: number = 0;
+  volumesAndPricesList: CsvDataModel[] = [];
 
   @ViewChild('csvReader') csvReader: any;
 
@@ -80,10 +81,10 @@ export class AppComponent {
         let csvRecord: CsvDataModel = {
           date: date,
           closeLast: +currentRecord[1].replace('$', '').trim(),
-          volume: currentRecord[2].trim(),
+          volume: +currentRecord[2].trim(),
           open: currentRecord[3].trim(),
-          high: currentRecord[4].trim(),
-          low: currentRecord[5].trim()
+          high: +currentRecord[4].replace('$', '').trim(),
+          low: +currentRecord[5].replace('$', '').trim()
         }
         csvArr.push(csvRecord);
       }
@@ -101,6 +102,17 @@ export class AppComponent {
 
     this.bullishDaysInARow = this.stockAnalysisService
       .calculateBullishDaysInARow(start, end, this.records);
+  }
+
+  calculateVolumePriceChanges(startDate, endDate) {
+    let start: Date = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+
+    let end: Date = new Date(endDate);
+    end.setHours(0, 0, 0, 0);
+
+    this.volumesAndPricesList = this.stockAnalysisService
+      .CalculateHighestVolumeAndPricechanges(startDate, endDate, this.records);
   }
 
 }

@@ -4,13 +4,13 @@ import { CsvDataModel } from "../interfaces/csv-data-model";
 @Injectable({ providedIn: 'root' })
 
 export class StockAnalysisService {
+
   calculateBullishDaysInARow(startDate, endDate, records: CsvDataModel[]): number {
     const start: Date = new Date(startDate);
-    console.log(start);
     const end: Date = new Date(endDate);
     if(start < end) {
       let csvData: CsvDataModel[] = records.filter((record) => {
-        if((record.date >= start) && (record.date <= end)) {
+        if(record.date >= start && record.date <= end) {
           return true;
         } else {
           return false;
@@ -33,8 +33,32 @@ export class StockAnalysisService {
       console.log(highestInARow);
       return highestInARow;
     } else {
-      alert('Make sure starting date is earlier ending date!');
+      alert('Make sure starting date is earlier than ending date!');
       return 0;
     }
+  }
+
+  CalculateHighestVolumeAndPricechanges(startDate, endDate, records: CsvDataModel[]): CsvDataModel[] {
+    const start: Date = new Date(startDate);
+    const end: Date = new Date(endDate);
+    let filteredRecords: CsvDataModel[] = [];
+    if(start < end) {
+      filteredRecords = records.filter((record) => {
+        if(record.date >= start && record.date <= end) {
+          return true;
+        } else {
+          return false;
+        }
+      }).sort((a, b) => {
+        if(a.volume - b.volume === 0) {
+          return (b.high - b.low) - (a.high - a.low);
+        } else {
+          return b.volume - a.volume;
+        }
+      });
+    } else {
+      alert('Make sure starting date is earlier ending date!');
+    }
+    return filteredRecords;
   }
 }
