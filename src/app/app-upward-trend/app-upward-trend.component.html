@@ -1,0 +1,36 @@
+<form>
+  <p>Bullish trend analysis</p>
+  <div class="form-group">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="upward-startingdate-addon">Starting date</span>
+      </div>
+      <input type="date"
+             #upwardStartDate
+             class="form-control"
+             placeholder="Starting date"
+             aria-label="Upward trend starting date"
+             aria-describedby="upward-startingdate-addon">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="upward-endingdate-addon">Ending date</span>
+      </div>
+      <input type="date"
+             #upwardEndDate
+             class="form-control"
+             placeholder="Ending date"
+             aria-label="Upward trend ending date"
+             aria-describedby="upward-endingdate-addon">
+    </div>
+  </div>
+  <button class="btn btn-primary"
+          type="button"
+          (click)="calculateUpward(upwardStartDate.value, upwardEndDate.value)">
+    Calculate
+  </button>
+  <span>Longest bullish trend: {{upwardDaysInARow}} days</span>
+</form>
+

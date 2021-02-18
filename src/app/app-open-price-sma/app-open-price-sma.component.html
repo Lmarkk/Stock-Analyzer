@@ -1,0 +1,49 @@
+<form>
+  <p>Opening price comparison (5-day SMA)</p>
+  <div class="form-group">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="smacomparison-startingdate-addon">Starting date</span>
+      </div>
+      <input type="date"
+             #SMAStartDate
+             class="form-control"
+             placeholder="Starting date"
+             aria-label="Opening price sma comparison starting date"
+             aria-describedby="smacomparison-startingdate-addon">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="smacomparison-endingdate-addon">Ending date</span>
+      </div>
+      <input type="date"
+             #SMAEndDate
+             class="form-control"
+             placeholder="Ending date"
+             aria-label="Opening price sma comparison ending date"
+             aria-describedby="smacomparison-endingdate-addon">
+    </div>
+  </div>
+  <button class="btn btn-primary"
+          type="button"
+          (click)="calculateOpenPriceSMA(SMAStartDate.value, SMAEndDate.value)">
+    Calculate
+  </button>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Price change (%) compared to 5-day SMA</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of priceChangeSMAList">
+      <th scope="row">{{item.date.toDateString()}}</th>
+      <td>{{item.priceChange}}</td>
+    </tr>
+    </tbody>
+  </table>
+</form>
