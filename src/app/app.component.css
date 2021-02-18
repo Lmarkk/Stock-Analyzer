@@ -1,0 +1,4 @@
+.wrapper.overflow {
+  overflow-y: scroll;
+  max-height: 50vh;
+}
