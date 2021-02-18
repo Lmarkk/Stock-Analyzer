@@ -16,12 +16,15 @@ export class AppComponent {
   fileName: string = '';
 
   @ViewChild('csvReader') csvReader: any;
+  @ViewChildren('analysisComponent') components: AnalysisComponentModel[];
 
   constructor(public stockAnalysisService: StockAnalysisService) {}
 
   uploadListener($event: any): void {
-
-    let files = $event.target.files;
+    for(const component of this.components) {
+      component.reset();
+    }
+    const files = $event.target.files;
 
     if(this.isValidCSVFile(files[0])) {
       const input = $event.target;
