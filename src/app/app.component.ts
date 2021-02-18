@@ -1,6 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { StockAnalysisService } from "./services/stock-analysis-service";
-import { CsvDataModel } from "./interfaces/csv-data-model";
+import { Component, ViewChild, ViewChildren } from '@angular/core';
+import { StockAnalysisService } from './services/stock-analysis.service';
+import { CsvDataModel } from './interfaces/csv-data-model';
+import { AnalysisComponentModel } from './interfaces/analysis-component-model';
+
 
 @Component({
   selector: 'app-root',
@@ -19,34 +21,33 @@ export class AppComponent {
 
   @ViewChild('csvReader') csvReader: any;
 
-  constructor(private stockAnalysisService: StockAnalysisService) {}
+  constructor(public stockAnalysisService: StockAnalysisService) {}
 
   uploadListener($event: any): void {
 
     let files = $event.target.files;
 
-    if (this.isValidCSVFile(files[0])) {
-
-      let input = $event.target;
-      let reader = new FileReader();
+    if(this.isValidCSVFile(files[0])) {
+      const input = $event.target;
+      const reader = new FileReader();
       reader.readAsText(input.files[0]);
       this.fileName = input.files[0].name;
 
       reader.onload = () => {
-        let csvData = reader.result;
-        let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);
+        const csvData = reader.result;
+        const csvRecordsArray = (csvData as string).split(/\r\n|\n/);
 
-        let headersRow = this.getHeaderArray(csvRecordsArray);
+        const headersRow = this.getHeaderArray(csvRecordsArray);
 
         this.records = this.getDataRecordsArrayFromCSVFile(csvRecordsArray, headersRow.length);
       };
 
-      reader.onerror = function () {
-        console.log('error is occured while reading file!');
+      reader.onerror = () => {
+        alert('error occurred while reading file!');
       };
 
     } else {
-      alert("Please import valid .csv file.");
+      alert('Please import valid .csv file.');
       this.fileReset();
     }
   }
@@ -56,36 +57,36 @@ export class AppComponent {
   }
 
   getHeaderArray(csvRecordsArr: any) {
-    let headers = (<string>csvRecordsArr[0]).split(',');
-    let headerArray = [];
-    for (let j = 0; j < headers.length; j++) {
-      headerArray.push(headers[j]);
+    const headers = (csvRecordsArr[0] as string).split(',');
+    const headerArray = [];
+    for(const header of headers) {
+      headerArray.push(header);
     }
     return headerArray;
   }
 
   fileReset() {
-    this.csvReader.nativeElement.value = "";
-    this.records = [];
+    this.csvReader.nativeElement.value = '';
+    this.stockAnalysisService.records = [];
     this.isLoaded = false;
   }
 
   getDataRecordsArrayFromCSVFile(csvRecordsArray: any, headerLength: any) {
-    let csvArr = [];
+    const csvArr = [];
 
     for (let i = 1; i < csvRecordsArray.length; i++) {
-      let currentRecord = (<string>csvRecordsArray[i]).split(',');
-      if (currentRecord.length == headerLength) {
-        let date = new Date(currentRecord[0].trim());
-        date.setHours( 0,0,0,0 );
-        let csvRecord: CsvDataModel = {
-          date: date,
+      const currentRecord = (csvRecordsArray[i] as string).split(',');
+      if (currentRecord.length === headerLength) {
+        const date = new Date(currentRecord[0].trim());
+        date.setHours( 0, 0, 0, 0 );
+        const csvRecord: CsvDataModel = {
+          date,
           closeLast: +currentRecord[1].replace('$', '').trim(),
           volume: +currentRecord[2].trim(),
           open: currentRecord[3].trim(),
           high: +currentRecord[4].replace('$', '').trim(),
           low: +currentRecord[5].replace('$', '').trim()
-        }
+        };
         csvArr.push(csvRecord);
       }
     }
