@@ -52,7 +52,11 @@ export class AppComponent {
   }
 
   isValidCSVFile(file: any) {
-    return file.name.endsWith(".csv");
+    if(file == null) {
+      return false;
+    } else {
+      return file.name.endsWith('.csv');
+    }
   }
 
   getHeaderArray(csvRecordsArr: any) {
