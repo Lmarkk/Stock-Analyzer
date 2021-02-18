@@ -12,12 +12,8 @@ import { AnalysisComponentModel } from './interfaces/analysis-component-model';
 export class AppComponent {
   title = 'Stock Analyzer 2000';
 
-  records: CsvDataModel[] = [];
   isLoaded: boolean = false;
   fileName: string = '';
-
-  bullishDaysInARow: number = 0;
-  volumesAndPricesList: CsvDataModel[] = [];
 
   @ViewChild('csvReader') csvReader: any;
 
@@ -39,7 +35,7 @@ export class AppComponent {
 
         const headersRow = this.getHeaderArray(csvRecordsArray);
 
-        this.records = this.getDataRecordsArrayFromCSVFile(csvRecordsArray, headersRow.length);
+        this.stockAnalysisService.records = this.getDataRecordsArrayFromCSVFile(csvRecordsArray, headersRow.length);
       };
 
       reader.onerror = () => {
@@ -83,7 +79,7 @@ export class AppComponent {
           date,
           closeLast: +currentRecord[1].replace('$', '').trim(),
           volume: +currentRecord[2].trim(),
-          open: currentRecord[3].trim(),
+          open: +currentRecord[3].replace('$', '').trim(),
           high: +currentRecord[4].replace('$', '').trim(),
           low: +currentRecord[5].replace('$', '').trim()
         };
@@ -93,27 +89,4 @@ export class AppComponent {
     this.isLoaded = true;
     return csvArr;
   }
-
-  calculateBullish(startDate, endDate) {
-    let start: Date = new Date(startDate);
-    start.setHours(0, 0, 0, 0);
-
-    let end: Date = new Date(endDate);
-    end.setHours(0, 0, 0, 0);
-
-    this.bullishDaysInARow = this.stockAnalysisService
-      .calculateBullishDaysInARow(start, end, this.records);
-  }
-
-  calculateVolumePriceChanges(startDate, endDate) {
-    let start: Date = new Date(startDate);
-    start.setHours(0, 0, 0, 0);
-
-    let end: Date = new Date(endDate);
-    end.setHours(0, 0, 0, 0);
-
-    this.volumesAndPricesList = this.stockAnalysisService
-      .CalculateHighestVolumeAndPricechanges(startDate, endDate, this.records);
-  }
-
 }
