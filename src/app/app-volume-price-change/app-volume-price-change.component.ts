@@ -6,21 +6,20 @@ import { AnalysisComponentModel } from '../interfaces/analysis-component-model';
 @Component({
   selector: 'app-volume-price-change',
   templateUrl: './app-volume-price-change.component.html',
+  styleUrls: ['./app-volume-price-change.component.css']
 })
+/**
+ * Component which holds holds information and shows ui elements related to volume and price change
+ * listing of stocks.
+ */
 export class AppVolumePriceChangeComponent implements AnalysisComponentModel {
 
   @Input() stockAnalysisService: StockAnalysisService;
   volumesAndPricesList: CsvDataModel[] = [];
 
   calculateVolumePriceChanges(startDate: string, endDate: string): void {
-    const start: Date = new Date(startDate);
-    start.setHours(0, 0, 0, 0);
-
-    const end: Date = new Date(endDate);
-    end.setHours(0, 0, 0, 0);
-
     this.volumesAndPricesList = this.stockAnalysisService
-      .calculateHighestVolumeAndPriceChanges(start, end);
+      .calculateHighestVolumeAndPriceChanges(startDate, endDate);
   }
 
   reset(): void {

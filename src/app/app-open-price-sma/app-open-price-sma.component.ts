@@ -6,21 +6,19 @@ import { AnalysisComponentModel } from '../interfaces/analysis-component-model';
 @Component({
   selector: 'app-open-price-sma',
   templateUrl: './app-open-price-sma.component.html',
+  styleUrls: ['./app-open-price-sma.component.css']
 })
+/**
+ * Component which holds holds information and shows ui elements related to SMA price comparisons.
+ */
 export class AppOpenPriceSmaComponent implements AnalysisComponentModel {
 
   @Input() stockAnalysisService: StockAnalysisService;
   priceChangeSMAList: PriceChangesSmaModel[] = [];
 
   calculateOpenPriceSMA(startDate: string, endDate: string): void {
-    const start: Date = new Date(startDate);
-    start.setHours(0, 0, 0, 0);
-
-    const end: Date = new Date(endDate);
-    end.setHours(0, 0, 0, 0);
-
     this.priceChangeSMAList = this.stockAnalysisService
-      .calculateOpenPriceChangeViaSMA(start, end);
+      .calculateOpenPriceChangeViaSMA(startDate, endDate);
   }
 
   reset(): void {
